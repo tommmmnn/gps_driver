@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+
+<launch>
+	<arg name="file_name" default="3_101" />
+	<arg name="utm_topic" value="/gps_odom"/>
+
+	<node name="nuogeng_node" pkg="nuogeng" type="nuogeng_node" output="screen">
+		<param name="port_name" value="/dev/ttyUSB0"/>
+		<param name="odom_topic" value="$(arg utm_topic)"/>
+		<param name="parent_frame_id" value="world"/>
+		<param name="child_frame_id" value="gps"/>
+		<param name="pub_odom" value="true"/>
+		<param name="pub_tf" value="true"/>
+	</node>
+
+	<node name="record_gps_node" pkg="nuogeng" type="record_gps_node" launch-prefix="xterm -e">
+		<param name="file_path" value="$(find auto_drive)/data/"/>
+		<param name="file_name" value="$(arg file_name).txt"/>
+		<param name="sample_distance" value="0.1" />
+		<param name="utm_topic" value="$(arg utm_topic)" />
+		<param name="gps_topic" value="/gps"/>
+	</node>
+
+</launch>
